@@ -40,6 +40,7 @@ class ViewController: UIViewController {
         format.alertColor = .red
         format.alertFieldActive = false
         format.titleAlwaysVisible = false
+        format.titleInVisibleIfFilled = false
         format.alertFont = UIFont(name: "AvenirNext-Regular", size: 14)!
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {

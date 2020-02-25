@@ -416,9 +416,7 @@ extension AnimatedField {
         alertLabel.text = message
         alertLabel.textColor = format.alertTitleActive ? format.alertColor : format.titleColor
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            if (self?.format.titleAlwaysVisible ?? true) {
-                self?.titleLabel.alpha = 0.0
-            }
+            self?.titleLabel.alpha = 0.0
             self?.alertLabel.alpha = 1.0
         }) { [weak self] (completed) in
             self?.alertLabel.shake()
