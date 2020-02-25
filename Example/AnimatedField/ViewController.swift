@@ -87,6 +87,7 @@ class ViewController: UIViewController {
         passwordAnimatedField.delegate = self
         passwordAnimatedField.type = .password(6, 10)
         passwordAnimatedField.isSecure = true
+        passwordAnimatedField.disablePasswordAutoFill = true
         passwordAnimatedField.showVisibleButton = true
         passwordAnimatedField.tag = 4
         

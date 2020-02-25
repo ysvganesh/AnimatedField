@@ -162,6 +162,19 @@ open class AnimatedField: UIView {
     public var isSecure = false {
         didSet { textField.isSecureTextEntry = isSecure }
     }
+  
+    public var disablePasswordAutoFill = false {
+      didSet {
+        //https://stackoverflow.com/a/46474180
+        if #available(iOS 12, *) {
+            // iOS 12 & 13: Not the best solution, but it works.
+            textField.textContentType = .oneTimeCode
+        } else {
+            // iOS 11: Disables the autofill accessory view.
+            textField.textContentType = .init(rawValue: "")
+        }
+      }
+    }
     
     /// Show visible button to make field unsecure
     public var showVisibleButton = false {
@@ -506,7 +519,7 @@ extension AnimatedField: AnimatedFieldInterface {
     
     open func secureField(_ secure: Bool) {
         isSecure = secure
-        eyeButton.setImage(secure ? format.visibleOnImage : format.visibleOffImage, for: .normal)
+        eyeButton.setImage(secure ? format.visibleOffImage : format.visibleOnImage, for: .normal)
         delegate?.animatedField(self, didSecureText: secure)
     }
 }
