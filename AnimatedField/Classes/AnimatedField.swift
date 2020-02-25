@@ -490,6 +490,11 @@ extension AnimatedField: AnimatedFieldInterface {
         textField.text = ""
     }
     
+    open func setText(_ text: String) {
+        textField.text = text
+        animateIn()
+    }
+  
     open func showAlert(_ message: String? = nil) {
         guard format.alertEnabled else { return }
         textField.textColor = format.alertFieldActive ? format.alertColor : format.textColor
