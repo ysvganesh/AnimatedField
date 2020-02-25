@@ -110,12 +110,13 @@ class ViewController: UIViewController {
         
         multilineAnimatedField.format = format
         multilineAnimatedField.format.counterEnabled = true
-        multilineAnimatedField.format.countDown = true
-        multilineAnimatedField.attributedPlaceholder = NSAttributedString(string: "Place")
+        multilineAnimatedField.format.countDownDecrementally = false
+        multilineAnimatedField.tag = 8//hack for datasource mathods make it work. need to fix
         multilineAnimatedField.dataSource = self
         multilineAnimatedField.delegate = self
+        multilineAnimatedField.attributedPlaceholder = NSAttributedString(string: "Place")
         multilineAnimatedField.type = .multiline
-        multilineAnimatedField.tag = 8
+        
         
         defaultField.format = format
         defaultField.placeholder = "This is a no-type field"

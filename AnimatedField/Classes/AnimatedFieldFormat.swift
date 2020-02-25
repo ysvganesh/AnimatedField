@@ -64,8 +64,8 @@ public struct AnimatedFieldFormat {
     /// Enable counter label
     public var counterEnabled = false
     
-    /// Set count down if counter is enabled
-    public var countDown = false
+    /// Set count down by decrementally
+    public var countDownDecrementally = false
     
     /// Enable counter animation on change
     public var counterAnimation = false
