@@ -39,9 +39,13 @@ class ViewController: UIViewController {
         format.textFont = UIFont(name: "AvenirNext-Regular", size: 16)!
         format.alertColor = .red
         format.alertFieldActive = false
-        format.titleAlwaysVisible = true
+        format.titleAlwaysVisible = false
         format.alertFont = UIFont(name: "AvenirNext-Regular", size: 14)!
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+          self.usernameAnimatedField.text = "TestName"
+        }
+      
         emailAnimatedField.format = format
         emailAnimatedField.placeholder = "Write your email"
         emailAnimatedField.dataSource = self

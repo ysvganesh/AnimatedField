@@ -224,6 +224,7 @@ open class AnimatedField: UIView {
         set {
             textField.text = textField.isHidden ? nil : newValue
             textView.text = textView.isHidden ? "" : newValue
+            if !format.titleInVisibleIfFilled { animateIn() }
         }
     }
     
@@ -488,11 +489,6 @@ extension AnimatedField: AnimatedFieldInterface {
         _ = resignFirstResponder()
         endEditing(true)
         textField.text = ""
-    }
-    
-    open func setText(_ text: String) {
-        textField.text = text
-        animateIn()
     }
   
     open func showAlert(_ message: String? = nil) {
