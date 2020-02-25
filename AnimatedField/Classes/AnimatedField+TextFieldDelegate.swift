@@ -84,7 +84,15 @@ extension AnimatedField: UITextFieldDelegate {
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        if !format.titleAlwaysVisible { animateOut() }
+        if !format.titleAlwaysVisible {
+          if textField.text?.count ?? 0 == 0 {
+              animateOut()
+          }else{
+            if format.titleInVisibleIfFilled {
+              animateOut()
+            }
+          }
+        }
         highlightField(false)
         delegate?.animatedFieldDidEndEditing(self)
         

@@ -12,6 +12,9 @@ public struct AnimatedFieldFormat {
     
     /// Title always visible
     public var titleAlwaysVisible = false
+  
+    /// Title always visible
+    public var titleInVisibleIfFilled = false
     
     /// Font for title label
     public var titleFont = UIFont.systemFont(ofSize: 13, weight: .regular)
