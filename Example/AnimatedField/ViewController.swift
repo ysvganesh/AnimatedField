@@ -35,17 +35,25 @@ class ViewController: UIViewController {
         continueButton.layer.cornerRadius = 5
         
         var format = AnimatedFieldFormat()
-        format.titleFont = UIFont(name: "AvenirNext-Regular", size: 14)!
+        format.titleFont = UIFont(name: "AvenirNext-Regular", size: 10)!
         format.textFont = UIFont(name: "AvenirNext-Regular", size: 16)!
         //format.uppercasedTitles = true
         format.alertColor = .red
         format.alertFieldActive = false
         format.titleAlwaysVisible = false
-        format.titleInVisibleIfFilled = true
+        format.titleInVisibleIfFilled = false
         format.alertFont = UIFont(name: "AvenirNext-Regular", size: 14)!
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+          self.usernameAnimatedField.text = ""
+        }
+      
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-          self.usernameAnimatedField.text = "TestName"
+          self.multilineAnimatedField.text = "Write your email Write your email Write your email Write your email Write your email"
+        }
+      
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+          self.multilineAnimatedField.text = ""
         }
       
         emailAnimatedField.format = format

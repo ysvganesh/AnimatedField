@@ -238,9 +238,27 @@ open class AnimatedField: UIView {
             return textField.isHidden ? textView.text : textField.text
         }
         set {
-            textField.text = textField.isHidden ? nil : newValue
-            textView.text = textView.isHidden ? "" : newValue
+            guard let text = newValue, text.count > 0 else {
+                textField.text = textField.isHidden ? nil : newValue
+                
+                if !format.titleAlwaysVisible { animateOut() }
+                if !textView.isHidden {
+                  textView.text = ""
+                  resizeTextViewHeight()
+                  endTextViewPlaceholder()
+                }
+                return
+            }
+          
+            textField.text = textField.isHidden ? nil : text
+            
             if !format.titleInVisibleIfFilled { animateIn() }
+            if !textView.isHidden {
+              textView.text = text
+              resizeTextViewHeight()
+              isShowingTextViewPlaceHolder = false
+              textView.textColor = format.textColor
+            }
         }
     }
     
