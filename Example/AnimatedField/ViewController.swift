@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         var format = AnimatedFieldFormat()
         format.titleFont = UIFont(name: "AvenirNext-Regular", size: 14)!
         format.textFont = UIFont(name: "AvenirNext-Regular", size: 16)!
+        //format.uppercasedTitles = true
         format.alertColor = .red
         format.alertFieldActive = false
         format.titleAlwaysVisible = false
@@ -95,6 +96,7 @@ class ViewController: UIViewController {
         passwordAnimatedField.isSecure = true
         passwordAnimatedField.disablePasswordAutoFill = true
         passwordAnimatedField.showVisibleButton = true
+        passwordAnimatedField.visibleEyeIconApperance = (color: .red, size: .init(width: 15, height: 15))
         passwordAnimatedField.tag = 4
         
         password2AnimatedField.format = format
@@ -125,11 +127,12 @@ class ViewController: UIViewController {
         multilineAnimatedField.format = format
         multilineAnimatedField.format.counterEnabled = true
         multilineAnimatedField.format.countDownDecrementally = false
-        multilineAnimatedField.setUp(with: .multiline,
+        multilineAnimatedField.setUp(with: .multiline(70.0),
                                      delegate: self,
                                      dataSource: self,
                                      placeHolder: "Place",
                                      attributes: nil)
+        //multilineAnimatedField.autocapitalizationType = .words
         multilineAnimatedField.tag = 8
       
       

@@ -179,12 +179,12 @@ class IconsLibrary: NSObject {
     //MARK: - Canvas Images
     
     class func imageOfEye(color: UIColor = .darkGray, size: CGSize = CGSize(width: 26, height: 26)) -> UIImage {
-        struct LocalCache {
+        /*struct LocalCache {
             static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
-        }
+        }*/
         var image: UIImage
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -192,17 +192,17 @@ class IconsLibrary: NSObject {
         image = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        LocalCache.image = image
+        //LocalCache.image = image
         return image
     }
     
     class func imageOfEyeoff(color: UIColor = .darkGray, size: CGSize = CGSize(width: 26, height: 26)) -> UIImage {
-        struct LocalCache {
+        /*struct LocalCache {
             static var image: UIImage!
         }
         if LocalCache.image != nil {
             return LocalCache.image
-        }
+        }*/
         var image: UIImage
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -210,7 +210,7 @@ class IconsLibrary: NSObject {
         image = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        LocalCache.image = image
+        //LocalCache.image = image
         return image
     }
     

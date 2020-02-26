@@ -34,6 +34,9 @@ public struct AnimatedFieldFormat {
     /// TextField text color
     public var textColor = UIColor.darkGray
     
+    /// Title label text uppercased
+    public var uppercasedTitles = false
+  
     /// Counter text color
     public var counterColor = UIColor.darkGray
     

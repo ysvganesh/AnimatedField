@@ -44,6 +44,7 @@ open class AnimatedField: UIView {
     private var datePicker: UIDatePicker?
     private var initialDate: Date?
     private var dateFormat: String?
+    private var maxMultiLinesHeight: CGFloat?
     
     var isShowingTextViewPlaceHolder = false
   
@@ -101,7 +102,11 @@ open class AnimatedField: UIView {
             if case AnimatedFieldType.url = type {
                 keyboardType = .URL
             }
-            if case AnimatedFieldType.multiline = type {
+            if case let AnimatedFieldType.multiline(maxHeight) = type {
+                if var height = maxHeight {
+                  if height < 31 { height = 30 }
+                  maxMultiLinesHeight = height
+                }
                 showTextView(true)
                 setupTextViewConstraints()
             } else {
@@ -135,6 +140,13 @@ open class AnimatedField: UIView {
     /// Keyboard type
     public var keyboardType = UIKeyboardType.alphabet {
         didSet { textField.keyboardType = keyboardType }
+    }
+  
+    public var autocapitalizationType: UITextAutocapitalizationType = .sentences {
+        didSet {
+            textField.autocapitalizationType = autocapitalizationType
+            textView.autocapitalizationType = autocapitalizationType
+        }
     }
 	
     public var keyboardToolbar: UIToolbar? {
@@ -171,6 +183,15 @@ open class AnimatedField: UIView {
                 textFieldRightConstraint.constant = 0
             }
         }
+    }
+  
+    public var visibleEyeIconApperance: (color: UIColor, size: CGSize) = (color: .lightGray, size: .init(width: 15, height: 15)) {
+      didSet {
+        format.visibleOnImage = IconsLibrary.imageOfEye(color: visibleEyeIconApperance.color, size: visibleEyeIconApperance.size)
+        format.visibleOffImage = IconsLibrary.imageOfEyeoff(color: visibleEyeIconApperance.color, size: visibleEyeIconApperance.size)
+        eyeButton.tintColor = visibleEyeIconApperance.color
+        eyeButton.setImage(isSecure ? format.visibleOffImage : format.visibleOnImage, for: .normal)
+      }
     }
     
     /// Result of regular expression validation
@@ -275,19 +296,21 @@ open class AnimatedField: UIView {
     private func setupTextField() {
         textField.delegate = self
         textField.textColor = format.textColor
+        textField.tintColor = format.textColor
         textField.tag = tag
         textField.backgroundColor = .clear
-		isPlaceholderVisible = !format.titleAlwaysVisible
+        isPlaceholderVisible = !format.titleAlwaysVisible
     }
     
     private func setupTitle() {
-        titleLabel.text = placeholder
+      titleLabel.text = format.uppercasedTitles ? placeholder.uppercased() : placeholder
         titleLabel.alpha = format.titleAlwaysVisible ? 1.0 : 0.0
     }
     
     private func setupTextView() {
         textView.delegate = self
         textView.textColor = format.textColor
+        textView.tintColor = format.textColor
         textView.tag = tag
         textView.textContainerInset = .zero
         textView.contentInset = UIEdgeInsets(top: 13, left: -5, bottom: 6, right: 0)
@@ -452,10 +475,22 @@ extension AnimatedField {
     
     func resizeTextViewHeight() {
         let size = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        if let maxHeight = maxMultiLinesHeight, size.height > maxHeight {
+          textView.isScrollEnabled = true
+          textView.showsVerticalScrollIndicator = true
+          return
+        }
         textViewHeightConstraint.constant = 10 + size.height
         UIView.animate(withDuration: 0.3) { [weak self] in
             self?.layoutIfNeeded()
         }
+      
+        if textView.isScrollEnabled && size.height < 40 {
+          textView.textContainerInset = .zero
+          textView.isScrollEnabled = false
+          textView.showsVerticalScrollIndicator = false
+        }
+      
         delegate?.animatedField(self, didResizeHeight: size.height + 10 + titleLabel.frame.size.height)
     }
     
