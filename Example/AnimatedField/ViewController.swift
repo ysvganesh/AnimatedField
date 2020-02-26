@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         format.alertColor = .red
         format.alertFieldActive = false
         format.titleAlwaysVisible = false
-        format.titleInVisibleIfFilled = false
+        format.titleInVisibleIfFilled = true
         format.alertFont = UIFont(name: "AvenirNext-Regular", size: 14)!
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -48,86 +48,97 @@ class ViewController: UIViewController {
         }
       
         emailAnimatedField.format = format
-        emailAnimatedField.placeholder = "Write your email"
-        emailAnimatedField.dataSource = self
-        emailAnimatedField.delegate = self
-        emailAnimatedField.type = .email
+        emailAnimatedField.setUp(with: .email,
+                                 delegate: self,
+                                 dataSource: self,
+                                 placeHolder: "Write your email",
+                                 attributes: [
+                                  .foregroundColor: UIColor.red,
+                                  .font: UIFont.systemFont(ofSize: 14)])
         emailAnimatedField.tag = 0
         
         usernameAnimatedField.format = format
-        usernameAnimatedField.placeholder = "Write your username"
-        usernameAnimatedField.dataSource = self
-        usernameAnimatedField.delegate = self
-        usernameAnimatedField.lowercased = true
-        usernameAnimatedField.type = .username(4, 10)
+        usernameAnimatedField.setUp(with: .username(4, 10),
+                                    delegate: self,
+                                    dataSource: self,
+                                    placeHolder: "Write your username",
+                                    attributes: nil)
         usernameAnimatedField.tag = 1
         
         birthdateAnimatedField.format = format
-        birthdateAnimatedField.placeholder = "Select your birthday"
-        birthdateAnimatedField.dataSource = self
-        birthdateAnimatedField.delegate = self
-        
         let defaultDate = Date().addingTimeInterval(-20 * 365 * 24 * 60 * 60)
         let minDate = Date().addingTimeInterval(-90 * 365 * 24 * 60 * 60)
         let maxDate = Date().addingTimeInterval(-13 * 365 * 24 * 60 * 60)
         let chooseText = "Choose"
         let dateFormat = "dd / MM / yyyy"
-        birthdateAnimatedField.type = .datepicker(.dateAndTime, defaultDate, minDate, maxDate, chooseText, dateFormat)
+        birthdateAnimatedField.setUp(with: .datepicker(.dateAndTime, defaultDate, minDate, maxDate, chooseText, dateFormat),
+                                     delegate: self,
+                                     dataSource: self,
+                                     placeHolder: "Select your birthday",
+                                     attributes: nil)
         birthdateAnimatedField.tag = 2
     
         numberAnimatedField.format = format
-        numberAnimatedField.placeholder = "Select your age"
-        numberAnimatedField.dataSource = self
-        numberAnimatedField.delegate = self
-        numberAnimatedField.type = .numberpicker(19, 16, 100, chooseText)
+        numberAnimatedField.setUp(with: .numberpicker(19, 16, 100, chooseText),
+                                  delegate: self,
+                                  dataSource: self,
+                                  placeHolder: "Select your age",
+                                  attributes: nil)
         numberAnimatedField.tag = 3
         
         passwordAnimatedField.format = format
-        passwordAnimatedField.placeholder = "New password (min 6, max 10)"
-        passwordAnimatedField.dataSource = self
-        passwordAnimatedField.delegate = self
-        passwordAnimatedField.type = .password(6, 10)
+        passwordAnimatedField.setUp(with: .password(6, 10),
+                                    delegate: self,
+                                    dataSource: self,
+                                    placeHolder: "New password (min 6, max 10)",
+                                    attributes: nil)
         passwordAnimatedField.isSecure = true
         passwordAnimatedField.disablePasswordAutoFill = true
         passwordAnimatedField.showVisibleButton = true
         passwordAnimatedField.tag = 4
         
         password2AnimatedField.format = format
-        password2AnimatedField.placeholder = "Repeat password"
-        password2AnimatedField.dataSource = self
-        password2AnimatedField.delegate = self
-        password2AnimatedField.type = .password(6, 10)
+        password2AnimatedField.setUp(with: .password(6, 10),
+                                     delegate: self,
+                                     dataSource: self,
+                                     placeHolder: "Repeat password",
+                                     attributes: nil)
         password2AnimatedField.isSecure = true
         password2AnimatedField.tag = 5
         
         priceAnimatedField.format = format
-        priceAnimatedField.placeholder = "Write the price"
-        priceAnimatedField.dataSource = self
-        priceAnimatedField.delegate = self
-        priceAnimatedField.type = .price(100, 2)
+        priceAnimatedField.setUp(with: .price(100, 2),
+                                 delegate: self,
+                                 dataSource: self,
+                                 placeHolder: "Write the price",
+                                 attributes: nil)
         priceAnimatedField.tag = 6
         
         urlAnimatedField.format = format
-        urlAnimatedField.placeholder = "Write your url web"
-        urlAnimatedField.dataSource = self
-        urlAnimatedField.delegate = self
-        urlAnimatedField.type = .url
+        urlAnimatedField.setUp(with: .url,
+                               delegate: self,
+                               dataSource: self,
+                               placeHolder: "Write your url web",
+                               attributes: nil)
         urlAnimatedField.tag = 7
         
         multilineAnimatedField.format = format
         multilineAnimatedField.format.counterEnabled = true
         multilineAnimatedField.format.countDownDecrementally = false
-        multilineAnimatedField.tag = 8//hack for datasource mathods make it work. need to fix
-        multilineAnimatedField.dataSource = self
-        multilineAnimatedField.delegate = self
-        multilineAnimatedField.attributedPlaceholder = NSAttributedString(string: "Place")
-        multilineAnimatedField.type = .multiline
-        
-        
+        multilineAnimatedField.setUp(with: .multiline,
+                                     delegate: self,
+                                     dataSource: self,
+                                     placeHolder: "Place",
+                                     attributes: nil)
+        multilineAnimatedField.tag = 8
+      
+      
         defaultField.format = format
-        defaultField.placeholder = "This is a no-type field"
-        defaultField.dataSource = self
-        defaultField.delegate = self
+        defaultField.setUp(with: .none,
+                           delegate: self,
+                           dataSource: self,
+                           placeHolder: "This is a no-type field",
+                           attributes: nil)
         defaultField.isSecure = true
         defaultField.tag = 9
     }

@@ -58,58 +58,31 @@ open class AnimatedField: UIView {
         return formatter
     }
 	
-	var isPlaceholderVisible = false {
-		didSet {
-			
-			guard isPlaceholderVisible else {
-				textField.placeholder = ""
-				textField.attributedPlaceholder = nil
-				return
-			}
-			
-			if let attributedString = attributedPlaceholder {
-				textField.attributedPlaceholder = attributedString
-			} else {
-				textField.placeholder = placeholder
-			}
-		}
-	}
-	
-    /// Placeholder
-    public var placeholder = "" {
-        didSet {
-            setupTextField()
-            setupTextView()
-            setupTitle()
+    var isPlaceholderVisible = false {
+      didSet {
+        
+        guard isPlaceholderVisible else {
+          textField.placeholder = ""
+          textField.attributedPlaceholder = nil
+          return
         }
+        
+        if let attributedString = attributedPlaceholder {
+          textField.attributedPlaceholder = attributedString
+        } else {
+          textField.placeholder = placeholder
+        }
+      }
     }
 	
-	/// The styled string that is displayed when there is no other text in the text field.
-	///
-	/// This property is nil by default. If set, the placeholder string is drawn using system-defined
-	/// color and the remaining style information (except the text color) of the attributed string.
-	/// Assigning a new value to this property also replaces the value of the placeholder property with
-	/// the same string data, albeit without any formatting information. Assigning a new value to this
-	/// property does not affect any other style-related properties of the text field.
-	public var attributedPlaceholder: NSAttributedString? {
-		didSet {
-			placeholder = attributedPlaceholder?.string ?? ""
-            setupTextField()
-            setupTextView()
-            setupTitle()
-        }
-	}
+    /// Placeholder
+    var placeholder = ""
 	
-	/// The input accessory view for this field
-	public var accessoryView: UIView? {
-		didSet {
-			textField.inputAccessoryView = accessoryView
-			textView.inputAccessoryView = accessoryView
-		}
-	}
+    /// The styled string that is displayed when there is no other text in the text field.
+    var attributedPlaceholder: NSAttributedString?
 	
     /// Field type (default values)
-    public var type: AnimatedFieldType = .none {
+    var type: AnimatedFieldType = .none {
         didSet {
             if case let AnimatedFieldType.datepicker(mode, defaultDate, minDate, maxDate, chooseText, format) = type {
                 initialDate = defaultDate
@@ -137,28 +110,36 @@ open class AnimatedField: UIView {
             }
         }
     }
-	
-	public var keyboardAppearance: UIKeyboardAppearance = .default {
-		didSet {
-			textField.keyboardAppearance = keyboardAppearance
-			textView.keyboardAppearance = keyboardAppearance
-		}
-	}
-    
+	    
     /// Uppercased field format
     public var uppercased = false
     
     /// Lowercased field format
     public var lowercased = false
     
+    /// The input accessory view for this field
+    public var accessoryView: UIView? {
+      didSet {
+        textField.inputAccessoryView = accessoryView
+        textView.inputAccessoryView = accessoryView
+      }
+    }
+    
+    public var keyboardAppearance: UIKeyboardAppearance = .default {
+      didSet {
+        textField.keyboardAppearance = keyboardAppearance
+        textView.keyboardAppearance = keyboardAppearance
+      }
+    }
+  
     /// Keyboard type
     public var keyboardType = UIKeyboardType.alphabet {
         didSet { textField.keyboardType = keyboardType }
     }
 	
-	public var keyboardToolbar: UIToolbar? {
-		didSet { textField.inputView = keyboardToolbar }
-	}
+    public var keyboardToolbar: UIToolbar? {
+      didSet { textField.inputView = keyboardToolbar }
+    }
     
     /// Secure field (dot format)
     public var isSecure = false {
@@ -242,6 +223,29 @@ open class AnimatedField: UIView {
         }
     }
     
+    public func setUp(with type: AnimatedFieldType,
+               delegate: AnimatedFieldDelegate?,
+               dataSource: AnimatedFieldDataSource?,
+               placeHolder: String,
+               attributes: [NSAttributedString.Key : Any]?) {
+      self.delegate = delegate
+      self.dataSource = dataSource
+      
+      self.placeholder = placeHolder
+      if let attributes = attributes {
+        attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: attributes)
+      }
+      
+      if case AnimatedFieldType.multiline = type {
+        setupTextView()
+      }else{
+        setupTextField()
+      }
+      setupTitle()
+      
+      self.type = type
+    }
+  
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -263,7 +267,7 @@ open class AnimatedField: UIView {
         setupAlertTitle()
         showTextView(false)
     }
-    
+  
     private func setupView() {
         backgroundColor = .clear
     }
@@ -487,7 +491,6 @@ extension AnimatedField {
     }
     
     func validateText(_ text: String?) -> String? {
-        
         let validationExpression = type.validationExpression
         let regex = dataSource?.animatedFieldValidationMatches(self) ?? validationExpression
         if let text = text, text != "", !text.isValidWithRegEx(regex) {
@@ -502,7 +505,6 @@ extension AnimatedField {
             price.doubleValue > maxPrice {
             return dataSource?.animatedFieldPriceExceededError(self) ?? type.priceExceededError
         }
-        
         return nil
     }
 }
