@@ -45,6 +45,8 @@ open class AnimatedField: UIView {
     private var initialDate: Date?
     private var dateFormat: String?
     
+    var isShowingTextViewPlaceHolder = false
+  
     /// Picker values
     private var numberPicker: UIPickerView?
     var numberOptions = [Int]()
@@ -222,7 +224,6 @@ open class AnimatedField: UIView {
             textView.textColor = format.textColor
             lineView.backgroundColor = format.lineColor
             eyeButton.tintColor = format.textColor
-            counterLabel.isHidden = !format.counterEnabled
             counterLabel.font = format.counterFont
             counterLabel.textColor = format.counterColor
             alertLabel.font = format.alertFont
@@ -286,6 +287,7 @@ open class AnimatedField: UIView {
         textView.tag = tag
         textView.textContainerInset = .zero
         textView.contentInset = UIEdgeInsets(top: 13, left: -5, bottom: 6, right: 0)
+        if !format.titleAlwaysVisible { isShowingTextViewPlaceHolder = true }
         textViewDidChange(textView)
         endTextViewPlaceholder()
     }
@@ -433,9 +435,9 @@ extension AnimatedField {
     
     func updateCounterLabel() {
       guard format.counterEnabled else { return }
-        let count = textView.text == attributedPlaceholder?.string ? (textView.text.count - (attributedPlaceholder?.string.count ?? 0)) : textView.text.count
+        let count = isShowingTextViewPlaceHolder ? 0 : textView.text.count
         let value = (dataSource?.animatedFieldLimit(self) ?? 0) - count
-        counterLabel.text = format.countDownDecrementally ? "\(value)" : "\((textView.text?.count ?? 0))/\(dataSource?.animatedFieldLimit(self) ?? 0)"
+        counterLabel.text = format.countDownDecrementally ? "\(value)" : "\(count)/\(dataSource?.animatedFieldLimit(self) ?? 0)"
         if format.counterAnimation {
             counterLabel.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
             UIView.animate(withDuration: 0.3) { [weak self] in
@@ -454,14 +456,25 @@ extension AnimatedField {
     }
     
     func endTextViewPlaceholder() {
+        counterLabel.isHidden = true
         if textView.text == "" {
-            textView.text = placeholder
-            textView.textColor = UIColor.lightGray.withAlphaComponent(0.8)
+            if format.titleAlwaysVisible { return }
+            isShowingTextViewPlaceHolder = true
+            //textView.text = placeholder
+            if let attributedText = attributedPlaceholder {
+              textView.attributedText = attributedText
+            } else {
+              textView.text = placeholder
+              textView.textColor = UIColor.lightGray.withAlphaComponent(0.8)
+            }
         }
     }
     
     func beginTextViewPlaceholder() {
-        if textView.text == placeholder {
+        counterLabel.isHidden = !format.counterEnabled
+        if format.counterEnabled { updateCounterLabel() }
+        if isShowingTextViewPlaceHolder {
+            isShowingTextViewPlaceHolder = false
             textView.text = ""
             textView.textColor = format.textColor
         }

@@ -86,7 +86,15 @@ extension AnimatedField: UITextViewDelegate {
     
     public func textViewDidEndEditing(_ textView: UITextView) {
         endTextViewPlaceholder()
-        if !format.titleAlwaysVisible { animateOut() }
+        if !format.titleAlwaysVisible {
+          if isShowingTextViewPlaceHolder {
+              animateOut()
+          }else{
+            if format.titleInVisibleIfFilled {
+              animateOut()
+            }
+          }
+        }
         highlightField(false)
         delegate?.animatedFieldDidEndEditing(self)
         
