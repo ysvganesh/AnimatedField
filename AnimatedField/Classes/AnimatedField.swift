@@ -404,12 +404,21 @@ open class AnimatedField: UIView {
     }
     
     open override func becomeFirstResponder() -> Bool {
-        textField.becomeFirstResponder()
+        if !textField.isHidden {
+          textField.becomeFirstResponder()
+        }else{
+          textView.becomeFirstResponder()
+        }
+      
         return super.becomeFirstResponder()
     }
     
     open override func resignFirstResponder() -> Bool {
-        textField.resignFirstResponder()
+        if !textField.isHidden {
+          textField.resignFirstResponder()
+        }else{
+          textView.resignFirstResponder()
+        }
         return super.resignFirstResponder()
     }
     
